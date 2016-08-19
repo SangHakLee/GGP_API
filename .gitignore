@@ -31,3 +31,6 @@ npm-debug.log
 
 # config files
 config/db.json
+
+# atom remote-ftp config file
+.ftpconfig
