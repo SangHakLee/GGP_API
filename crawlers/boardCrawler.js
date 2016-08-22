@@ -118,6 +118,55 @@ function getNowPostNo(url){
 
 }
 
+function getBoardByCrawler(board_url, board_no, post_no){
+	var options = {
+		uri: board_url,
+		qs : {
+			mode : 'view',
+			// boardType_seq : 358,
+			board_no : board_no
+		},
+    transform: function (body) {
+       return cheerio.load(body, {
+				normalizeWhitespace: true, // 공백 제거
+			});
+    }
+	};
+
+	return rp(options)
+	.then(function($){
+		var row = {};
+		$('.boardview table tr').each(function(index){
+			var td_raw = $(this).find('td')
+			if(!td_raw) {// 해당 번호에 게시판이 없다는 것
+				return false
+			}
+			// console.log('있다');
+			var td = td_raw.text();
+			// var td = $(this).find('td').html();
+			++index;
+			// console.log('index : ', index);
+			// console.log('td : ', td);
+			if(index == 1) row.post_title = td;
+			if(index == 3) row.posted_at = td;
+			if(index == 6){
+				row.post_content = td;
+				row.post_content_html = td_raw.html();
+			}
+		});
+		row.post_no = post_no;
+		row.board_id = 1;
+		row.board_no = board_no;
+		// console.log('row : ', row)
+		models.POSTS_STATS.create(row)
+	})
+	.catch(function(err){
+		throw err
+		// return err
+		console.error('err: ', err)
+	});
+}
+
 
 // getNowPostNo('http://gachon.ac.kr/community/opencampus/03.jsp?boardType_seq=358')
 
