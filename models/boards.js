@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'BOARDS1',
+    tableName: 'BOARDS',
     freezeTableName: true,
     underscored: true,
     classMethods: {},
