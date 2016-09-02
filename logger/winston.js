@@ -26,6 +26,9 @@ var logger = new(winston.Logger)({
     new(winston.transports.File)({
       level: 'debug',
       json: false,
+      timestamp: function() {
+        return moment().format("YYYY-MM-DD HH:mm:ss");
+      },
       filename: logFilePath + '/debug.log',
       datePattern: 'yyyy-MM-dd.log'
     })

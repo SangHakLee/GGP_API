@@ -1,5 +1,6 @@
 var request = require('request'),
 		cheerio = require('cheerio'),
+		async = require('async'),
     rp = require('request-promise');
 
 
@@ -70,7 +71,6 @@ Crawler.prototype.getAllBoard = function(board_no){
 };
 
 Crawler.prototype.getPostByCrawler = function(board_id, board_url, board_no, post_no){
-	console.log("hi getPostByCrawler");
   var options = {
 		uri: board_url,
 		qs : {
@@ -105,8 +105,8 @@ Crawler.prototype.getPostByCrawler = function(board_id, board_url, board_no, pos
     row.board_id = board_id;
     row.board_no = board_no;
 		row.post_no = post_no;
-		// console.log('row : ', row);
 		console.log('게시판 추가 : ', board_no);
+		models.Posts.create(row);
 	})
 	.catch(function(err){
     console.error('err: ', err);
@@ -119,23 +119,64 @@ Crawler.prototype.updateBoardById = function(board_id){
 	return models.Boards.findById(board_id)
 	.then(function(result){
 		// console.log(result);
+		return result;
 
-		crawler.getNowPostNumByBoardUrl(result.board_url)
-		.then(function(now){
-			console.log('now', now);
-		})
-
-		var _result = {
-			"board_id" : result.board_id,
-			"board_url" : result.board_url,
-			"now_board_no" : result.now_board_no,
-			"now_post_no" : result.now_post_no
-		};
-		return _result;
+		// crawler.getNowPostNumByBoardUrl(result.board_url)
+		// .then(function(now){
+		// 	console.log('now', now);
+		// })
+		//
+		// var _result = {
+		// 	"board_id" : result.board_id,
+		// 	"board_url" : result.board_url,
+		// 	"now_board_no" : result.now_board_no,
+		// 	"now_post_no" : result.now_post_no
+		// };
+		// return _result;
 	})
+
 	.catch(function(err){
 		throw new Error(err);
 	});
+};
+
+Crawler.prototype.updateBoardPostNo = function (update_row, where) {
+  return models.Boards.update(update_row, {
+    where : where
+  }).then(function(result) {
+    return result;
+  }).catch(function(err) {
+    throw err;
+  });
+};
+
+
+Crawler.prototype.updateRecent = function (board) {
+  var board_id = board.get('id');
+  var board_url = board.get('board_url');
+  var now_post_no_db = board.get('now_post_no');
+  var now_board_no_db = board.get('now_board_no');
+  crawler.getNowPostNumByBoardUrl(board.get('board_url'))
+	.then(function(now_no) {
+    if (now_no) { // 에러가 아닐 때
+      if (now_no[0] != now_post_no_db) { // 추가할 것이 있다.
+        while (now_board_no_db < now_no[1]) {
+          crawler.getPostByCrawler(board_id, board_url, ++now_board_no_db, ++now_post_no_db)
+					.then(function() {})
+					.catch(function(err){throw new Error(err);});
+        }
+        var update_row = {
+          now_board_no: now_board_no_db,
+          now_post_no: now_post_no_db
+        };
+        var where = {
+          id: board_id
+        };
+        crawler.updateBoardPostNo(update_row, where);
+      }
+    }
+  });
+
 };
 
 
@@ -144,15 +185,12 @@ var crawler = new Crawler();
 // crawler.getPostByCrawler(1, 'http://gachon.ac.kr/community/opencampus/03.jsp?boardType_seq=358', 5700, 5204);
 crawler.updateBoardById(1)
 .then(function(result){
-	// return this.getPostByCrawler(1, result.board_url, result., 5204);
-	return crawler.getPostByCrawler(1, 'http://gachon.ac.kr/community/opencampus/03.jsp?boardType_seq=358', 5700, 5204);
-})
-.then(function(result){
-	console.log('result ?', result);
+	return crawler.updateRecent(result);
 })
 .catch(function(err){
 	console.log('err : ', err);
 });
+
 
 
 
