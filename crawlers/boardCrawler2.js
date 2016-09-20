@@ -181,15 +181,15 @@ Crawler.prototype.updateRecent = function (board) {
 
 
 
-var crawler = new Crawler();
-// crawler.getPostByCrawler(1, 'http://gachon.ac.kr/community/opencampus/03.jsp?boardType_seq=358', 5700, 5204);
-crawler.updateBoardById(1)
-.then(function(result){
-	return crawler.updateRecent(result);
-})
-.catch(function(err){
-	console.log('err : ', err);
-});
+// var crawler = new Crawler();
+// // crawler.getPostByCrawler(1, 'http://gachon.ac.kr/community/opencampus/03.jsp?boardType_seq=358', 5700, 5204);
+// crawler.updateBoardById(1)
+// .then(function(result){
+// 	return crawler.updateRecent(result);
+// })
+// .catch(function(err){
+// 	console.log('err : ', err);
+// });
 
 
 
