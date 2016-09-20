@@ -6,7 +6,9 @@ var models = require('../models');
 
 router.get('/', function(req, res){
   logger.info('get all posts');
-  models.Posts.findAll({})
+  models.Posts.findAll({
+	  order : 'post_no DESC'
+  })
   .then(function(posts){
     res.json(posts);
   })

@@ -27,7 +27,8 @@ var boardCrawlJob = new CronJob(
   function(){
 
   },
-  true, // job 발 실행
+  // true, // job 발 실행
+  false, // job 발 실행
   'Asia/Seoul');
 // var cronTime = ;\
 
