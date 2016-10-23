@@ -13,21 +13,44 @@ router.post('/', function(req, res){
 			code  : 2
 		});
 	}
-	models.Keywords.create({
-		keyword : req.body.keyword
+
+	models.Keywords.findOne({
+		where : {
+			keyword : req.body.keyword
+		}
 	})
-	.then(function(keyword){
-		// console.log('keyword', keyword);
-		// res.json(keywords);
-		model.Keywords.findAll({})
-		.then(function(keywords){
-			console.log('????');
-			res.json("??");
-		});
+	.then(function(keyword, err){
+		console.log('keyword', keyword);
+		if ( keyword === null ) {
+			models.Keywords.create({
+				keyword : req.body.keyword
+			})
+			.then(function(keyword){
+				res.json(keyword);
+			});
+		} else {
+			res.json(keyword);
+		}
 	})
 	.catch(function(err){
+		console.log('err 2', err);
 		res.json(err);
 	});
+	// models.Keywords.create({
+	// 	keyword : req.body.keyword
+	// })
+	// .then(function(keyword){
+	// 	// console.log('keyword', keyword);
+	// 	// res.json(keywords);
+	// 	model.Keywords.findAll({})
+	// 	.then(function(keywords){
+	// 		console.log('????');
+	// 		res.json("??");
+	// 	});
+	// })
+	// .catch(function(err){
+	// 	res.json(err);
+	// });
 });
 
 router.get('/', function(req, res){
