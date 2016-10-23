@@ -5,6 +5,8 @@ var request = require('request'),
 
 
 var models = require('../models');
+var logger = require('../logger/winston');
+
 
 
 function Crawler(){}
@@ -115,7 +117,6 @@ Crawler.prototype.getPostByCrawler = function(board_id, board_url, board_no, pos
 };
 
 Crawler.prototype.updateBoardById = function(board_id){
-
 	return models.Boards.findById(board_id)
 	.then(function(result){
 		// console.log(result);
@@ -136,6 +137,7 @@ Crawler.prototype.updateBoardById = function(board_id){
 	})
 
 	.catch(function(err){
+
 		throw new Error(err);
 	});
 };
@@ -152,6 +154,7 @@ Crawler.prototype.updateBoardPostNo = function (update_row, where) {
 
 
 Crawler.prototype.updateRecent = function (board) {
+console.log('crawler', crawler.getNowPostNumByBoardUrl);
   var board_id = board.get('id');
   var board_url = board.get('board_url');
   var now_post_no_db = board.get('now_post_no');
@@ -161,7 +164,7 @@ Crawler.prototype.updateRecent = function (board) {
     if (now_no) { // 에러가 아닐 때
       if (now_no[0] != now_post_no_db) { // 추가할 것이 있다.
         while (now_board_no_db < now_no[1]) {
-          crawler.getPostByCrawler(board_id, board_url, ++now_board_no_db, ++now_post_no_db)
+          this.crawler.getPostByCrawler(board_id, board_url, ++now_board_no_db, ++now_post_no_db)
 					.then(function() {})
 					.catch(function(err){throw new Error(err);});
         }

@@ -12,23 +12,25 @@ var logger = require('../logger/winston');
 
 
 var boardCrawlJob = new CronJob(
-  '* */30 * * * *',
+  '* */10 * * * *',
+  // '*/1 * * * * *',
   function(){ // job 내용
     logger.info('게시판 크롤러');
-    var crawler = new Crawler();
-    crawler.updateBoardById(1)
-    .then(function(result){
-    	return crawler.updateRecent(result);
-    })
-    .catch(function(err){
-    	console.log('err : ', err);
-    });
+	var crawler = new Crawler();
+	crawler.updateBoardById(1)
+	.then(function(result){
+		return crawler.updateRecent(result);
+	})
+	.catch(function(err){
+		logger.error(err);
+		console.log('err : ', err);
+	});
   },
   function(){
 
   },
-  // true, // job 발 실행
-  false, // job 발 실행
+  true, // job 발 실행
+  // false, // job 발 실행
   'Asia/Seoul');
 // var cronTime = ;\
 

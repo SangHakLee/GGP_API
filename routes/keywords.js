@@ -66,7 +66,14 @@ router.get('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-	// TODO keywords 1개 읽기
+	logger.info('get keyword by id');
+    models.Keywords.findById(req.params.id)
+    .then(function(keyword){
+      res.json(keyword);
+    })
+    .catch(function(err){
+      res.json(err);
+    });
 });
 
 module.exports = router;
