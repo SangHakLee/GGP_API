@@ -1,4 +1,5 @@
 var express = require('express');
+var rp = require('request-promise');
 var router = express.Router();
 
 var config = require(__dirname + '/../config/firebase.json');
@@ -6,6 +7,7 @@ var firebase = require('firebase');
 var _ = require('underscore');
 
 // var cons = require('../config/constant');
+var logger = require('../logger/winston');
 
 
 firebase.initializeApp({
@@ -62,7 +64,47 @@ router.get('/firebase', function(req, res){
 });
 
 
+// 구글 로그인 토큰
+router.get('/google', function(req, res){
+	res.render('google');
+});
 
+
+router.post('/google', function(req, res){
+	if ( !req.body.accessToken ) {
+		return res.status(400)
+		.json({
+			error : "accessToken is empty",
+			code  : 2
+		});
+	}
+	var options = {
+		url: 'https://www.googleapis.com/plus/v1/people/me?access_token='+req.body.accessToken,
+	};
+	rp(options)
+	.then(function(google_info) {
+		google_info = JSON.parse(google_info);
+		var user_id = 'g_' + google_info.id;
+		models.Users.findOrCreate({
+			where: {"user_id" : user_id},
+			defaults: {
+				"user_id": user_id,
+				"name": google_info.displayName,
+				"picture":  google_info.image.url
+			}
+		})
+		.spread(function(user, created){
+			if ( created ){
+				logger.info('new user :'+user_id );
+			}
+			res.json(user);
+			// console.log('user', user);
+		});
+	})
+	.catch(function(err) {
+		console.error('err: ', err);
+	});
+});
 
 
 
