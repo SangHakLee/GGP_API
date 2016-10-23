@@ -153,8 +153,7 @@ Crawler.prototype.updateBoardPostNo = function (update_row, where) {
 };
 
 
-Crawler.prototype.updateRecent = function (board) {
-console.log('crawler', crawler.getNowPostNumByBoardUrl);
+Crawler.prototype.updateRecent = function (crawler, board) {
   var board_id = board.get('id');
   var board_url = board.get('board_url');
   var now_post_no_db = board.get('now_post_no');
@@ -189,7 +188,7 @@ console.log('crawler', crawler.getNowPostNumByBoardUrl);
 // // crawler.getPostByCrawler(1, 'http://gachon.ac.kr/community/opencampus/03.jsp?boardType_seq=358', 5700, 5204);
 // crawler.updateBoardById(1)
 // .then(function(result){
-// 	return crawler.updateRecent(result);
+// 	return crawler.updateRecent(crawler, result);
 // })
 // .catch(function(err){
 // 	console.log('err : ', err);
