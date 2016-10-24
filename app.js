@@ -29,7 +29,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'gachon10',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+	cookie: {
+    maxAge: 1000 * 60 * 60 * 24 // 쿠키 유효기간 하루
+  }
 }));
 
 app.use('/api', api);

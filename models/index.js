@@ -27,6 +27,10 @@ Object.keys(db).forEach(function(modelName) {
   }
 });
 
+// db.Users.hasMany(db.UsersKeywords, {foreignKey: 'user_id'});
+
+db.Keywords.belongsTo(db.UsersKeywords, {foreignKey: 'keyword_id'} );
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

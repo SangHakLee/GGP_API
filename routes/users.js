@@ -111,6 +111,26 @@ router.post('/google', function(req, res){
 	});
 });
 
+router.get('/keywords', function(req, res){
+	logger.info('get all users\'s keywords');
 
+	if ( !req.session.user_id ) {
+		return res.status(400)
+		.json({
+			error : "login first",
+			code  : 2
+		});
+	}
+	models.UsersKeywords.findAll({
+		where : {
+			user_id : req.session.user_id
+		},
+		// include: {model : models.Keywords}
+	}).then(function(user_keyword){
+      res.json(user_keyword);
+    }).catch(function(err){
+      res.json(err);
+    });
+});
 
 module.exports = router;
