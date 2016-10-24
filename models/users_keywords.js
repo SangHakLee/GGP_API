@@ -1,21 +1,19 @@
 module.exports = function(sequelize, DataTypes) {
-    var Keywords = sequelize.define('Keywords', {
-        keyword: {
+    var UsersKeywords = sequelize.define('UsersKeywords', {
+        user_id: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
+            allowNull: false
         },
-        count: {
+        keyword_id: {
             type: DataTypes.INTEGER,
-			defaultValue: 0,
             allowNull: false
         }
     }, {
-        tableName: 'KEYWORDS',
+        tableName: 'USERS_KEYWORDS',
         freezeTableName: true,
         underscored: true,
         classMethods: {},
         hooks: {}
     });
-    return Keywords;
+    return UsersKeywords;
 };

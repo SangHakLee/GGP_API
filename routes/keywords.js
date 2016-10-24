@@ -14,23 +14,49 @@ router.post('/', function(req, res){
 		});
 	}
 
-	models.Keywords.findOne({
+	if ( !req.session.user_id ) {
+		return res.status(400)
+		.json({
+			error : "login first",
+			code  : 2
+		});
+	}
+
+	models.Keywords.findOrCreate({
 		where : {
-			keyword : req.body.keyword
+			"keyword" : req.body.keyword
+		},
+		defaults : {
+			"keyword": req.body.keyword
 		}
-	})
-	.then(function(keyword, err){
-		console.log('keyword', keyword);
-		if ( keyword === null ) {
-			models.Keywords.create({
-				keyword : req.body.keyword
-			})
+	}).spread(function(keyword, created){
+
+		models.UsersKeywords.findOrCreate({
+			where : {
+				"user_id"    : req.session.user_id,
+				"keyword_id" : keyword.get('id')
+			},
+			defaults : {
+				"user_id"    : req.session.user_id,
+				"keyword_id" : keyword.get('id')
+			}
+		}).spread(function(user_keyword, created2){
+			if ( !created2 ) {
+				console.log('이미 있음');
+				res.json(keyword);
+				return;
+			}
+			keyword.increment({
+				"count" : 1
+			});
+			// .then(function(keyword){
+			keyword.reload()
 			.then(function(keyword){
+				console.log('keyword', keyword);
 				res.json(keyword);
 			});
-		} else {
-			res.json(keyword);
-		}
+		});
+
 	})
 	.catch(function(err){
 		console.log('err 2', err);
@@ -53,12 +79,16 @@ router.post('/', function(req, res){
 	// });
 });
 
+
+// POST /api/keywords/users
 router.post('/users', function(req, res){
-	
-})
+	logger.info('get all keywords');
+
+});
 
 router.get('/', function(req, res){
 	logger.info('get all keywords');
+	console.log('req.session',req.session);
     models.Keywords.findAll({
     })
     .then(function(keywords){
@@ -80,6 +110,6 @@ router.get('/:id', function(req, res){
     });
 });
 
-router.
+
 
 module.exports = router;

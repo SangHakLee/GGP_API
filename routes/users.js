@@ -97,6 +97,11 @@ router.post('/google', function(req, res){
 			if ( created ){
 				logger.info('new user :'+user_id );
 			}
+			req.session._id = user.get('id');
+			req.session.user_id = user.get('user_id');
+			req.session.name = user.get('name');
+			req.session.picture = user.get('picture');
+
 			res.json(user);
 			// console.log('user', user);
 		});
