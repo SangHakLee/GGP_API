@@ -53,6 +53,10 @@ router.post('/', function(req, res){
 	// });
 });
 
+router.post('/users', function(req, res){
+	
+})
+
 router.get('/', function(req, res){
 	logger.info('get all keywords');
     models.Keywords.findAll({
@@ -75,5 +79,7 @@ router.get('/:id', function(req, res){
       res.json(err);
     });
 });
+
+router.
 
 module.exports = router;
