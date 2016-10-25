@@ -10,10 +10,10 @@
 	<ul>
 		<li><%= session.name %></li>
 		<li><img src="<%= session.picture %>" alt="사용자 프로필"></li>
-		<li><a href="/api/users/logout">로그아웃</a></li>
+		<li><%- msg %></li>
 	</ul>
 	<form action="/api/keywords" method="post">
-		키워드 <label for="keyword2"><input type="text" name="keyword2" id="keyword2"></label>
+		키워드 <label for="keyword"><input type="text" name="keyword" id="keyword"></label>
 
 		<button type="submit">등록</button>
 	</form>

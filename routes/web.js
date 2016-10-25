@@ -23,9 +23,19 @@ router.get('/', function(req, res) {
 });
 
 router.use('/keywords', function(req, res){
-	res.render('keywords', {
-      session: req.session
-    });
+	if ( req.session._id ) {
+		res.render('keywords', {
+			session: req.session,
+			msg : '<a href="/api/users/logout">로그아웃</a>'
+	   	});
+	} else {
+		res.render('keywords', {
+			session: {
+				name : '로그인이 필요합니다.'
+			},
+			msg : '<a href="/api/users/google">로그인 페이지 이동</a>'
+	   	});
+	}
 });
 
 module.exports = router;
