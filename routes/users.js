@@ -70,6 +70,12 @@ router.get('/google', function(req, res){
 });
 
 
+router.get('/logout', function(req, res) {
+	req.session.destory();
+	res.status(200);
+});
+
+
 router.post('/google', function(req, res){
 	if ( !req.body.accessToken ) {
 		return res.status(400)
@@ -107,10 +113,17 @@ router.post('/google', function(req, res){
 		});
 	})
 	.catch(function(err) {
-		console.error('err: ', err);
+		// console.error('err: ', err);
+		logger.error( err );
+		res.status(400)
+		.json({
+			error : "google login error",
+			code  : 2
+		});
 	});
 });
 
+// api/users/keywords
 router.get('/keywords', function(req, res){
 	logger.info('get all users\'s keywords');
 
@@ -125,7 +138,7 @@ router.get('/keywords', function(req, res){
 		where : {
 			user_id : req.session.user_id
 		},
-		// include: {model : models.Keywords}
+		include: {model : models.Keywords}
 	}).then(function(user_keyword){
       res.json(user_keyword);
     }).catch(function(err){

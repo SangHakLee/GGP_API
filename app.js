@@ -4,7 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('express-session')
+var session = require('express-session');
+var SessionStore = require('express-mysql-session');
 
 var api = require('./routes/api');
 // var routes = require('./routes/index');
@@ -26,10 +27,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var config = require(__dirname + '/config/db.json')["aws"];
+
+var sessionStore = new SessionStore({
+	host: config.host,
+    port: config.port,
+    user: config.username,
+    password: config.password,
+    database: config.database
+});
+
 app.use(session({
     secret: 'gachon10',
-    resave: false,
-    saveUninitialized: true,
+	store:sessionStore,
+    resave: false,// don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored,
 	cookie: {
     maxAge: 1000 * 60 * 60 * 24 // 쿠키 유효기간 하루
   }
