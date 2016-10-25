@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         count: {
             type: DataTypes.INTEGER,
-			defaultValue: 0,
+            defaultValue: 0,
             allowNull: false
         }
     }, {
@@ -15,7 +15,11 @@ module.exports = function(sequelize, DataTypes) {
         freezeTableName: true,
         underscored: true,
         classMethods: {},
-        hooks: {}
+        hooks: {},
+        defaultScope: {
+            order: 'count DESC'
+
+        }
     });
     return Keywords;
 };
