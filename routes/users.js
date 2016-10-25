@@ -71,8 +71,13 @@ router.get('/google', function(req, res){
 
 
 router.get('/logout', function(req, res) {
-	req.session.destory();
-	res.status(200);
+	req.session.destroy(function(err){
+		if (err) {
+			logger.error(err);
+			return;
+		}
+		res.send('logout');
+	});
 });
 
 

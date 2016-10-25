@@ -40,6 +40,7 @@
 				.done(function(result) {
 					console.log('result ', result);
 					alert('로그인 완료 !! 안녕? '+result.name);
+					location.href = '/'
 				})
 			} else if (authResult['error']) {
 				// 오류가 발생했습니다.

@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+
+<head>
+	<title>아마따</title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+	<h2>현재 정보</h2>
+	<ul>
+		<li>
+			<%= session.name %>
+		</li>
+		<li><img src="<%= session.picture %>" alt="사용자 프로필"></li>
+		<li><%- msg %></li>
+	</ul>
+</body>
+
 </html>

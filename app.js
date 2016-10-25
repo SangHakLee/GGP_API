@@ -8,6 +8,7 @@ var session = require('express-session');
 var SessionStore = require('express-mysql-session');
 
 var api = require('./routes/api');
+var web = require('./routes/web');
 // var routes = require('./routes/index');
 // var users = require('./routes/users');
 // var boards = require('./routes/boards');
@@ -48,6 +49,7 @@ app.use(session({
 }));
 
 app.use('/api', api);
+app.use('/', web);
 // app.use('/', routes);
 // app.use('/users', users);
 // app.use('/boards', boards);
