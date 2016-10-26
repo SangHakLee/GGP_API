@@ -13,7 +13,14 @@ module.exports = function(sequelize, DataTypes) {
         freezeTableName: true,
         underscored: true,
         classMethods: {},
-        hooks: {}
+        hooks: {},
+        // defaultScope: {
+        //     include: [
+        //         {
+        //             model: models.Keywords
+        //         }
+        //     ]
+        // }
     });
     return UsersKeywords;
 };

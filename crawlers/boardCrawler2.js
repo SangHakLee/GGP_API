@@ -1,6 +1,5 @@
 var request = require('request'),
-		cheerio = require('cheerio'),
-		async = require('async'),
+	cheerio = require('cheerio'),
     rp = require('request-promise');
 
 
@@ -163,7 +162,7 @@ Crawler.prototype.updateRecent = function (crawler, board) {
     if (now_no) { // 에러가 아닐 때
       if (now_no[0] != now_post_no_db) { // 추가할 것이 있다.
         while (now_board_no_db < now_no[1]) {
-          this.crawler.getPostByCrawler(board_id, board_url, ++now_board_no_db, ++now_post_no_db)
+          crawler.getPostByCrawler(board_id, board_url, ++now_board_no_db, ++now_post_no_db)
 					.then(function() {})
 					.catch(function(err){throw new Error(err);});
         }

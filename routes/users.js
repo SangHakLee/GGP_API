@@ -76,7 +76,7 @@ router.get('/logout', function(req, res) {
 			logger.error(err);
 			return;
 		}
-		res.send('logout');
+		res.send('logout 완료');
 	});
 });
 
@@ -146,6 +146,71 @@ router.get('/keywords', function(req, res){
 		include: {model : models.Keywords}
 	}).then(function(user_keyword){
       res.json(user_keyword);
+    }).catch(function(err){
+      res.json(err);
+    });
+});
+
+// api/users/like/posts/
+router.post('/like/posts', function(req, res){
+	logger.info('add like posts');
+
+	if ( !req.session.user_id ) {
+		return res.status(400)
+		.json({
+			error : "login first",
+			code  : 2
+		});
+	}
+	if ( !req.body.post_id ) {
+		return res.status(400)
+		.json({
+			error : "post_id is empty",
+			code  : 2
+		});
+	}
+	var user_id = req.session.user_id;
+	var post_id = req.body.post_id;
+
+	var query = {
+		'user_id' : user_id,
+		'post_id' : post_id
+	};
+
+	models.UsersLikePosts.findOrCreate({
+		where    : query,
+		defaults : query,
+		include  : [
+			{model : models.Posts},
+			{model : models.Users}
+		]
+	}).spread(function(like, created) {
+		res.json(like);
+	}).catch(function(err){
+		logger.err(err);
+		res.json(err);
+	});
+});
+
+// api/users/like/posts/
+router.get('/like/posts', function(req, res) {
+	logger.info('get like posts');
+
+	if ( !req.session.user_id ) {
+		return res.status(400)
+		.json({
+			error : "login first",
+			code  : 2
+		});
+	}
+	models.UsersLikePosts.findAll({
+		where : {'user_id' : req.session.user_id},
+		include  : [
+			{model : models.Posts},
+			{model : models.Users}
+		]
+	}).then(function(posts){
+      res.json(posts);
     }).catch(function(err){
       res.json(err);
     });

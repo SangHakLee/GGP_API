@@ -18,7 +18,6 @@ module.exports = function(sequelize, DataTypes) {
         hooks: {},
         defaultScope: {
             order: 'count DESC'
-
         }
     });
     return Keywords;

@@ -80,12 +80,14 @@ router.post('/', function(req, res){
 });
 
 
-// POST /api/keywords/users
-router.post('/users', function(req, res){
-	logger.info('get all keywords');
+// DELETE api/keywords
+router.delete('/', function(req, res) {
 
 });
 
+
+
+// GET api/keywords
 router.get('/', function(req, res){
 	logger.info('get all keywords');
 	console.log('req.session',req.session);
@@ -99,6 +101,7 @@ router.get('/', function(req, res){
     });
 });
 
+// GET api/keywords/1
 router.get('/:id', function(req, res){
 	logger.info('get keyword by id');
     models.Keywords.findById(req.params.id)
