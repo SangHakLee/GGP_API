@@ -96,24 +96,32 @@ router.post('/google', function(req, res){
 	.then(function(google_info) {
 		google_info = JSON.parse(google_info);
 		var user_id = 'g_' + google_info.id;
+		var data = {
+			"user_id": user_id,
+			"name": google_info.displayName,
+			"picture":  google_info.image.url,
+			"email"  : google_info.emails[0].value
+		};
+		console.log('data', data);
 		models.Users.findOrCreate({
-			where: {"user_id" : user_id},
-			defaults: {
-				"user_id": user_id,
-				"name": google_info.displayName,
-				"picture":  google_info.image.url
-			}
+			where   : {"user_id" : user_id},
+			defaults: data
 		})
 		.spread(function(user, created){
 			if ( created ){
 				logger.info('new user :'+user_id );
 			}
-			req.session._id = user.get('id');
-			req.session.user_id = user.get('user_id');
-			req.session.name = user.get('name');
-			req.session.picture = user.get('picture');
+			user.updateAttributes(data).
+			then(function(user){
+				req.session._id = user.get('id');
+				req.session.user_id = user.get('user_id');
+				req.session.name = user.get('name');
+				req.session.email = user.get('email');
+				req.session.picture = user.get('picture');
 
-			res.json(user);
+				res.json(user);
+			});
+
 			// console.log('user', user);
 		});
 	})

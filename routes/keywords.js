@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-
 var logger = require('../logger/winston');
 var models = require('../models');
 
@@ -14,13 +13,13 @@ router.post('/', function(req, res){
 		});
 	}
 
-	if ( !req.session.user_id ) {
-		return res.status(400)
-		.json({
-			error : "login first",
-			code  : 2
-		});
-	}
+	// if ( !req.session.user_id ) {
+	// 	return res.status(400)
+	// 	.json({
+	// 		error : "login first",
+	// 		code  : 2
+	// 	});
+	// }
 
 	models.Keywords.findOrCreate({
 		where : {
@@ -30,6 +29,22 @@ router.post('/', function(req, res){
 			"keyword": req.body.keyword
 		}
 	}).spread(function(keyword, created){
+
+		// 비로그인 시
+		if ( !req.session.user_id ) {
+			// keyword.increment({
+			// 	"count" : 1
+			// });
+			// keyword.reload()
+			// .then(function(keyword){
+			// 	// console.log('keyword', keyword);
+			// 	res.json(keyword);
+			// });
+
+			res.json(keyword);
+			return;
+		}
+
 
 		models.UsersKeywords.findOrCreate({
 			where : {
@@ -52,7 +67,7 @@ router.post('/', function(req, res){
 			// .then(function(keyword){
 			keyword.reload()
 			.then(function(keyword){
-				console.log('keyword', keyword);
+				// console.log('keyword', keyword);
 				res.json(keyword);
 			});
 		});

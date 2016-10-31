@@ -7,6 +7,9 @@ module.exports = function(sequelize, DataTypes) {
         name: {
             type: DataTypes.STRING(20)
         },
+		email: {
+			type: DataTypes.STRING(50)
+		},
         picture: {
             type: DataTypes.TEXT
         }

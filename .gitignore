@@ -32,6 +32,7 @@ npm-debug.log
 # config files
 config/db.json
 config/firebase.json
+config/mail.json
 
 # atom remote-ftp config file
 .ftpconfig
