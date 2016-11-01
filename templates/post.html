@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<!-- Compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<style media="screen">
+
+		body {
+			display: flex;
+			min-height: 100vh;
+			flex-direction: column;
+		}
+
+		main {
+			flex: 1 0 auto;
+		}
+	</style>
+</head>
+
+<body>
+	<nav>
+		<div class="nav-wrapper">
+			<a href="#" class="brand-logo">아마따</a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+			</ul>
+		</div>
+	</nav>
+
+	<content select="">
+		<div class="card-panel hoverable">
+			<h4 class="truncate">공지사항 등록 안내.</h4>
+		</div>
+
+		<div>
+		   {{post_title}}
+		</div>
+		<a href="{{link}}">이동</a>
+
+	</content>
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col l6 s12">
+					<h5 class="white-text">아마따</h5>
+					<p class="grey-text text-lighten-4">공지사항 알림이 아마따!</p>
+				</div>
+			</div>
+		</div>
+		<div class="footer-copyright">
+			<div class="container">
+				© 2016 Copyright code.ryan.lee@gmail.com
+				<a class="grey-text text-lighten-4 right" href="#!">아마따</a>
+			</div>
+		</div>
+	</footer>
+</body>
+<!-- Compiled and minified JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+
+</html>
