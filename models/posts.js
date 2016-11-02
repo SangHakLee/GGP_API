@@ -49,9 +49,9 @@ module.exports = function(sequelize, DataTypes) {
 				},
 				function(err, info){
 					if(err){
-						logger.error(err)
+						logger.error(err);
 				   }else{
-				       console.log('Password reset sent');
+				       logger.info('공지사항 등록 후 이메일 완료');
 				   }
 			   });
 			}
@@ -61,6 +61,7 @@ module.exports = function(sequelize, DataTypes) {
 };
 
 var logger = require('../logger/winston');
+var fs = require("fs");
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var config = require(__dirname + '/../config/mail.json');
