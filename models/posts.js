@@ -40,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
 				var DETAIL_URL = 'http://gachon.ac.kr/community/opencampus/03.jsp?mode=view&boardType_seq=358&board_no=';
 				var post_title = post.get('post_title');
 				var board_no   = post.get('board_no');
-				var url = DETAIL_URL + board_no;
+				var link = DETAIL_URL + board_no;
 				send({
 					to: to,
 				},{
