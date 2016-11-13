@@ -6,6 +6,7 @@ var models = require('../models');
 
 router.get('/', function(req, res){
   logger.info('get all posts');
+  console.log('req.seesion : ', req.session);
   models.Posts.findAll({
 	  limit : 10,
 	  order : 'post_no DESC'
