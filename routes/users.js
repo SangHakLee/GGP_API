@@ -1,5 +1,7 @@
 var express = require('express');
 var rp = require('request-promise');
+var bcrypt = require('bcryptjs');
+
 var router = express.Router();
 
 var config = require(__dirname + '/../config/firebase.json');
@@ -9,6 +11,106 @@ var _ = require('underscore');
 // var cons = require('../config/constant');
 var logger = require('../logger/winston');
 
+router.post('/join', function(req, res, next) {
+	var user_id = req.body.user_id;
+	var password = req.body.password;
+
+	if ( !user_id ) {
+		return res.status(400)
+		.json({
+			error : "user_id is empty",
+			code  : 2
+		});
+	}
+	if ( !password ) {
+		return res.status(400)
+		.json({
+			error : "password is empty",
+			code  : 2
+		});
+	}
+
+	models.Users.findOne({
+		where : {
+			user_id : user_id
+		}
+	}).then(function(user) {
+		if ( user ) {
+			res.json({
+				error : "해당 아이디 유저가 있습니다.",
+				code  : 2
+			});
+			return;
+		}
+		models.Users.create({
+			user_id : user_id,
+			password : password
+		}).then(function(result){
+			logger.info('post join id/pw');
+			res.json(result);
+		});
+	}).catch(function(err) {
+		req.json(err);
+	});
+});
+
+
+router.post('/login', function(req, res) {
+	var user_id = req.body.user_id;
+	var password = req.body.password;
+
+	if ( !user_id ) {
+		return res.status(400)
+		.json({
+			error : "user_id is empty",
+			code  : 2
+		});
+	}
+	if ( !password ) {
+		return res.status(400)
+		.json({
+			error : "password is empty",
+			code  : 2
+		});
+	}
+
+	models.Users.findOne({
+		where : {
+			user_id : user_id
+		}
+	}).then(function(user) {
+		if ( !user ) {
+			res.json({
+				error : "아이디를 확인해주세요..",
+				code  : 2
+			});
+			return;
+		}
+
+		var check = bcrypt.compareSync( password, user.dataValues.password );
+		console.log('check 1: ', check);
+
+		if ( !check ) {
+			res.json({
+				error : "비밀번호를 다시 확인해주세요..",
+				code  : 2
+			});
+			return;
+		}
+
+		logger.info('post login id/pw');
+
+		req.session._id = user.get('id');
+		req.session.user_id = user.get('user_id');
+		req.session.name = user.get('name');
+		req.session.email = user.get('email');
+		req.session.picture = user.get('picture');
+
+		res.json(user);
+	}).catch(function(err) {
+		res.json(err);
+	});
+});
 
 firebase.initializeApp({
   apiKey: "AIzaSyCQ7ElGgbPhf8ueajaho8Bc2P-h8I-XW5U",
