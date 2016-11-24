@@ -242,7 +242,9 @@ router.post('/google', function(req, res){
 router.get('/keywords', function(req, res){
 	logger.info('get all users\'s keywords');
 
-	if ( !req.session.user_id ) {
+	var user_id = req.session.user_id || req.body.user_id;
+
+	if ( !user_id ) {
 		return res.status(400)
 		.json({
 			error : "login first",
@@ -251,7 +253,7 @@ router.get('/keywords', function(req, res){
 	}
 	models.UsersKeywords.findAll({
 		where : {
-			user_id : req.session.user_id
+			user_id : user_id
 		},
 		include: {model : models.Keywords}
 	}).then(function(user_keyword){
@@ -265,7 +267,9 @@ router.get('/keywords', function(req, res){
 router.post('/like/posts', function(req, res){
 	logger.info('add like posts');
 
-	if ( !req.session.user_id ) {
+	var user_id = req.session.user_id || req.body.user_id;
+
+	if ( !user_id ) {
 		return res.status(400)
 		.json({
 			error : "login first",
@@ -279,7 +283,6 @@ router.post('/like/posts', function(req, res){
 			code  : 2
 		});
 	}
-	var user_id = req.session.user_id;
 	var post_id = req.body.post_id;
 
 	var query = {
@@ -306,7 +309,10 @@ router.post('/like/posts', function(req, res){
 router.get('/like/posts', function(req, res) {
 	logger.info('get like posts');
 
-	if ( !req.session.user_id ) {
+	var user_id = req.session.user_id || req.body.user_id;
+
+
+	if ( !user_id ) {
 		return res.status(400)
 		.json({
 			error : "login first",
@@ -314,7 +320,7 @@ router.get('/like/posts', function(req, res) {
 		});
 	}
 	models.UsersLikePosts.findAll({
-		where : {'user_id' : req.session.user_id},
+		where : {'user_id' : user_id},
 		include  : [
 			{model : models.Posts},
 			{model : models.Users}

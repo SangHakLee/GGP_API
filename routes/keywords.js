@@ -5,6 +5,8 @@ var models = require('../models');
 
 router.post('/', function(req, res){
 	logger.info('post keywords');
+
+	var user_id = req.session.user_id || req.body.user_id;
 	if ( !req.body.keyword ) {
 		return res.status(400)
 		.json({
@@ -48,11 +50,11 @@ router.post('/', function(req, res){
 
 		models.UsersKeywords.findOrCreate({
 			where : {
-				"user_id"    : req.session.user_id,
+				"user_id"    : user_id,
 				"keyword_id" : keyword.get('id')
 			},
 			defaults : {
-				"user_id"    : req.session.user_id,
+				"user_id"    : user_id,
 				"keyword_id" : keyword.get('id')
 			}
 		}).spread(function(user_keyword, created2){
