@@ -309,7 +309,8 @@ router.post('/like/posts', function(req, res){
 router.get('/like/posts', function(req, res) {
 	logger.info('get like posts');
 
-	var user_id = req.session.user_id || req.body.user_id;
+	var user_id = req.session.user_id || req.query.user_id;
+	console.log('user_id :', user_id);
 
 
 	if ( !user_id ) {
