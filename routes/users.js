@@ -268,6 +268,7 @@ router.post('/like/posts', function(req, res){
 	logger.info('add like posts');
 
 	var user_id = req.session.user_id || req.body.user_id;
+	var post_id = req.body.post_id;
 
 	if ( !user_id ) {
 		return res.status(400)
@@ -276,14 +277,13 @@ router.post('/like/posts', function(req, res){
 			code  : 2
 		});
 	}
-	if ( !req.body.post_id ) {
+	if ( !post_id ) {
 		return res.status(400)
 		.json({
 			error : "post_id is empty",
 			code  : 2
 		});
 	}
-	var post_id = req.body.post_id;
 
 	var query = {
 		'user_id' : user_id,
@@ -303,6 +303,41 @@ router.post('/like/posts', function(req, res){
 		logger.err(err);
 		res.json(err);
 	});
+});
+
+router.delete('like/posts', function(req, res) {
+	logger.info('delete like posts');
+	var user_id = req.session.user_id || req.body.user_id;
+	var post_id = req.body.post_id;
+
+	if ( !user_id ) {
+		return res.status(400)
+		.json({
+			error : "login first",
+			code  : 2
+		});
+	}
+	if ( !post_id ) {
+		return res.status(400)
+		.json({
+			error : "post_id is empty",
+			code  : 2
+		});
+	}
+	var query = {
+		'user_id' : user_id,
+		'post_id' : post_id
+	};
+
+	models.UsersLikePosts.destroy({
+		where : query
+	}).then(function(result){
+		res.json(result);
+	}).catch(function(err){
+		logger.err(err);
+		res.json(err);
+	});
+
 });
 
 // api/users/like/posts/

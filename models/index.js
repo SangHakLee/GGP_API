@@ -27,8 +27,12 @@ Object.keys(db).forEach(function(modelName) {
 
 db.UsersKeywords.belongsTo(db.Keywords, {foreignKey: 'keyword_id'});
 
+db.Posts.hasMany(db.UsersLikePosts, {foreignKey:'post_id'});
 db.UsersLikePosts.belongsTo(db.Posts, {foreignKey: 'post_id'});
+
+
 db.UsersLikePosts.belongsTo(db.Users, {foreignKey: 'user_id', targetKey: 'user_id'});
+
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
