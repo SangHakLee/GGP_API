@@ -14,6 +14,8 @@ var logger = require('../logger/winston');
 router.post('/join', function(req, res, next) {
 	var user_id = req.body.user_id;
 	var password = req.body.password;
+	var reg_id = req.body.reg_id || null;
+
 
 	if ( !user_id ) {
 		return res.status(400)
@@ -44,7 +46,8 @@ router.post('/join', function(req, res, next) {
 		}
 		models.Users.create({
 			user_id : user_id,
-			password : password
+			password : password,
+			reg_id : reg_id
 		}).then(function(result){
 			logger.info('post join id/pw');
 			res.json(result);
@@ -56,6 +59,8 @@ router.post('/join', function(req, res, next) {
 
 
 router.post('/login', function(req, res) {
+	logger.info('post login id/pw');
+
 	var user_id = req.body.user_id;
 	var password = req.body.password;
 
@@ -98,7 +103,13 @@ router.post('/login', function(req, res) {
 			return;
 		}
 
-		logger.info('post login id/pw');
+		if ( req.body.reg_id ) {
+			user.update({
+				reg_id : req.body.reg_id
+			}).catch(function(err){
+				logger.info('로그인 후 reg_id 등록 실패 : ' + err);
+			});
+		}
 
 		req.session._id = user.get('id');
 		req.session.user_id = user.get('user_id');
@@ -109,6 +120,34 @@ router.post('/login', function(req, res) {
 		res.json(user);
 	}).catch(function(err) {
 		res.json(err);
+	});
+});
+
+router.post('regId', function(req, res) {
+	var user_id = req.session.user_id || req.body.user_id;
+	var reg_id  = req.body.reg_id;
+
+	if ( !user_id ) {
+		return res.status(400)
+		.json({
+			error : "user_id is empty",
+			code  : 2
+		});
+	}
+
+	if ( !reg_id ) {
+		return res.status(400)
+		.json({
+			error : "reg_id is empty",
+			code  : 2
+		});
+	}
+
+	models.Publisher.update({reg_id: reg_id},
+	 {where: {user_id: user_id}, returning: true}).then(function(user) {
+	      res.json(user);
+	 }).catch(function(err) {
+	      res.json(err);
 	});
 });
 
@@ -191,6 +230,7 @@ router.post('/google', function(req, res){
 			code  : 2
 		});
 	}
+	var reg_id = req.body.reg_id || null;
 	var options = {
 		url: 'https://www.googleapis.com/plus/v1/people/me?access_token='+req.body.accessToken,
 	};
@@ -202,7 +242,8 @@ router.post('/google', function(req, res){
 			"user_id": user_id,
 			"name": google_info.displayName,
 			"picture":  google_info.image.url,
-			"email"  : google_info.emails[0].value
+			"email"  : google_info.emails[0].value,
+			"reg_id" : reg_id
 		};
 		console.log('data', data);
 		models.Users.findOrCreate({

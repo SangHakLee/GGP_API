@@ -8,6 +8,9 @@ var LIMIT = 10;
 router.get('/', function(req, res){
   logger.info('get all posts');
   console.log('req.seesion : ', req.session);
+
+  var user_id = req.session.user_id || req.query.user_id;
+
   var page  = req.query.page || 1;
   var limit = req.query.limit || LIMIT;
   var offset = (page-1) * limit;
@@ -21,6 +24,11 @@ router.get('/', function(req, res){
 	  order  : 'post_no DESC'
   })
   .then(function(posts){
+	for ( var i in posts ) {
+		var likeInfo = findUserId(posts[i], user_id);
+		posts[i].dataValues.like_count  = likeInfo.count;
+		posts[i].dataValues.is_user_like = likeInfo.like;
+	}
     res.json(posts);
   })
   .catch(function(err){
@@ -30,7 +38,7 @@ router.get('/', function(req, res){
 
 router.get('/:id', function(req, res){
   logger.info('get post by id');
-  var user_id = req.query.user_id;
+  var user_id = req.session.user_id || req.query.user_id;
   models.Posts.find({
 	  where  : {id : req.params.id},
 	  include: [{
@@ -41,11 +49,9 @@ router.get('/:id', function(req, res){
   })
   .then(function(posts){
 	var likeInfo = findUserId(posts, user_id);
-	// console.log('postsaaaaaaaaaaaaaaaa', likeInfo);
 
-	posts.dataValues.likeCount = likeInfo.count;
-	posts.dataValues.isUserLike    = likeInfo.like;
-	// console.log('postsaaaaaaaaaaaaaaaa', posts);
+	posts.dataValues.like_count  = likeInfo.count;
+	posts.dataValues.is_user_like = likeInfo.like;
     res.json(posts);
   })
   .catch(function(err){
@@ -63,11 +69,8 @@ function findUserId (posts, user_id){
 			like = true;
 		}
 	}
-	console.log('postsaaaaaaaaaaaaaaaa 1', count);
-	console.log('postsaaaaaaaaaaaaaaaa 2', like);
 
 	return {count: count, like: like};
-
 }
 
 

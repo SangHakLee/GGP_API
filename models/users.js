@@ -29,6 +29,9 @@ module.exports = function(sequelize, DataTypes) {
 		},
         picture: {
             type: DataTypes.TEXT
+        },
+		reg_id: {
+            type: DataTypes.TEXT
         }
     }, {
         tableName: 'USERS',
