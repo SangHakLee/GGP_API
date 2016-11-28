@@ -243,8 +243,9 @@ router.post('/google', function(req, res){
 			"name": google_info.displayName,
 			"picture":  google_info.image.url,
 			"email"  : google_info.emails[0].value,
-			"reg_id" : reg_id
 		};
+
+		if ( reg_id ) data.reg_id = reg_id;
 		console.log('data', data);
 		models.Users.findOrCreate({
 			where   : {"user_id" : user_id},
