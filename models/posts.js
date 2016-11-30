@@ -61,6 +61,8 @@ module.exports = function(sequelize, DataTypes) {
 };
 
 var logger = require('../logger/winston');
+var Gcm = require('../gcm/test');
+var Bot = require('../crawlers/searchKeywords');
 var fs = require("fs");
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
@@ -71,6 +73,11 @@ var smtpTransport = nodemailer.createTransport(smtpTransport({
     auth: config.auth
 }));
 
+// gcm test
+var gcm = new Gcm();
+// gcm.sendGcm('test', 'content', ['dlpDBbF5Jgo:APA91bGaRsZIfDzCDH6JuTZ5p11Hu6f0SGY95_Nkgk_oKnilldXT-CFxsA-PROWLZT5ROsilz1m-BWACjK9et9o6rBfN_oR-I3nSZeZfLPcoQ7LobRH6BWXua4Oyv5sp5C9qcDKtyQ7j'], function(result){
+// 	console.log('result : ', result);
+// });
 
 var path = __dirname + '/../templates/post.html';
 var html =  fs.readFileSync(path, 'utf8');
@@ -80,3 +87,9 @@ var send = smtpTransport.templateSender({
 	subject: '공지사항 등록 안내',
 	html: html
 });
+
+// var bot = new Bot();
+// bot.findKeywords('아마따 아마따')
+// .then(function(result){
+//
+// });

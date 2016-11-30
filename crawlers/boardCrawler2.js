@@ -7,7 +7,6 @@ var models = require('../models');
 var logger = require('../logger/winston');
 
 
-
 function Crawler(){}
 
 function getBoardNoFromUrl(url) {

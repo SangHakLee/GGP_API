@@ -1,7 +1,6 @@
 var gcm = require('node-gcm');
 var fs = require('fs');
 
-
 var message = new gcm.Message({
     collapseKey: 'demo',
     delayWhileIdle: true,
@@ -18,9 +17,6 @@ var message = new gcm.Message({
     // }
 });
 
-// console.log(message);
-
-
 
 var server_api_key = 'AIzaSyAUEX5kRjIR5yh_G4t54KulHwh7SCrLs3c';
 var sender = new gcm.Sender(server_api_key);
@@ -35,12 +31,30 @@ var G3 ='dlpDBbF5Jgo:APA91bGaRsZIfDzCDH6JuTZ5p11Hu6f0SGY95_Nkgk_oKnilldXT-CFxsA-
 registrationIds.push(G3);
 
 
-
 function Gcm() {
-	sender.send(message, registrationIds, 4, function (err, result) {
-	    console.log(result);
-	});
+	// sender.send(message, registrationIds, 4, function (err, result) {
+	//     console.log(result);
+	// });
 }
 
+Gcm.prototype.sendGcm = function(title, msg, regIds, callback){
+	var message = new gcm.Message({
+		collapseKey: 'demo',
+		delayWhileIdle: true,
+		timeToLive: 3,
+		data: {
+		  title  : title,
+		  message: msg
+		}
+	});
+	sender.send(message, regIds, 4, function (err, result) {
+	    console.log(result);
+		if ( err ) {
+			callback(err);
+		} else {
+			callback(result);
+		}
+	});
+};
 
 module.exports = Gcm;
