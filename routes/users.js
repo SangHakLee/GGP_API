@@ -359,7 +359,7 @@ router.post('/like/posts', function(req, res){
 	});
 });
 
-router.delete('like/posts', function(req, res) {
+router.delete('/like/posts', function(req, res) {
 	logger.info('delete like posts');
 	var user_id = req.session.user_id || req.body.user_id;
 	var post_id = req.body.post_id;
@@ -386,9 +386,13 @@ router.delete('like/posts', function(req, res) {
 	models.UsersLikePosts.destroy({
 		where : query
 	}).then(function(result){
-		res.json(result);
+		if ( result ) {
+			res.json(query);
+		} else {
+			res.json(false);
+		}
 	}).catch(function(err){
-		logger.err(err);
+		logger.error(err);
 		res.json(err);
 	});
 
