@@ -340,7 +340,19 @@ router.post('/like/posts', function(req, res){
 			{model : models.Users}
 		]
 	}).spread(function(like, created) {
-		res.json(like);
+		if (created) {
+			models.UsersLikePosts.find({
+				where : {id : like.get('id')},
+				include  : [
+					{model : models.Posts},
+					{model : models.Users}
+				]
+			}).then(function(like2){
+				res.json(like2);
+			});
+		} else {
+			res.json(like);
+		}
 	}).catch(function(err){
 		logger.err(err);
 		res.json(err);
