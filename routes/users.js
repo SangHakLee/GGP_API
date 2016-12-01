@@ -336,7 +336,7 @@ router.post('/like/posts', function(req, res){
 		where    : query,
 		defaults : query,
 		include  : [
-			{model : models.Posts},
+			{model : models.Posts, include : [models.UsersLikePosts] },
 			{model : models.Users}
 		]
 	}).spread(function(like, created) {
@@ -345,15 +345,22 @@ router.post('/like/posts', function(req, res){
 			models.UsersLikePosts.find({
 				where : {id : like.get('id')},
 				include  : [
-					{model : models.Posts},
+					{
+						model : models.Posts,
+						include : [models.UsersLikePosts]
+					},
 					{model : models.Users}
 				]
 			}).then(function(like2){
-				like2.dataValues.is_user_like = true;
+				var likeInfo = findUserId(like2.get('Post'), user_id);
+				like2.dataValues.like_count = likeInfo.count;
+				like2.dataValues.is_user_like = likeInfo.like;
 				res.json(like2);
 			});
 		} else {
-			like.dataValues.is_user_like = true;
+			var likeInfo = findUserId(like.get('Post'), user_id);
+			like.dataValues.like_count = likeInfo.count;
+			like.dataValues.is_user_like = likeInfo.like;
 			res.json(like);
 		}
 	}).catch(function(err){
