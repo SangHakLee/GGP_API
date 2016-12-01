@@ -413,7 +413,6 @@ router.delete('/like/posts', function(req, res) {
 		} else {
 			res.json(false);
 		}
-		res.json(result);
 	}).catch(function(err){
 		logger.error(err);
 		res.json(err);
