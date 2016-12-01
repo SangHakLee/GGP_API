@@ -63,13 +63,11 @@ function findUserId (posts, user_id){
 	var UsersLikePosts = posts.get('UsersLikePosts');
 	var count = UsersLikePosts.length;
 	var like  = false;
-
 	for (var i in UsersLikePosts) {
 		if ( user_id == UsersLikePosts[i].dataValues.user_id ) {
 			like = true;
 		}
 	}
-
 	return {count: count, like: like};
 }
 

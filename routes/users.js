@@ -340,6 +340,7 @@ router.post('/like/posts', function(req, res){
 			{model : models.Users}
 		]
 	}).spread(function(like, created) {
+		// console.log('created ', created);
 		if (created) {
 			models.UsersLikePosts.find({
 				where : {id : like.get('id')},
@@ -348,9 +349,11 @@ router.post('/like/posts', function(req, res){
 					{model : models.Users}
 				]
 			}).then(function(like2){
+				like2.dataValues.is_user_like = true;
 				res.json(like2);
 			});
 		} else {
+			like.dataValues.is_user_like = true;
 			res.json(like);
 		}
 	}).catch(function(err){
@@ -358,6 +361,18 @@ router.post('/like/posts', function(req, res){
 		res.json(err);
 	});
 });
+
+function findUserId (posts, user_id){
+	var UsersLikePosts = posts.get('UsersLikePosts');
+	var count = UsersLikePosts.length;
+	var like  = false;
+	for (var i in UsersLikePosts) {
+		if ( user_id == UsersLikePosts[i].dataValues.user_id ) {
+			like = true;
+		}
+	}
+	return {count: count, like: like};
+}
 
 router.delete('/like/posts', function(req, res) {
 	logger.info('delete like posts');
