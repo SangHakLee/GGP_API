@@ -412,9 +412,9 @@ router.delete('/like/posts', function(req, res) {
 		where : query
 	}).then(function(result){
 		if ( result ) {
-			res.json(query);
+			res.json({'result' : true});
 		} else {
-			res.json(false);
+			res.json({'result' : false});
 		}
 	}).catch(function(err){
 		logger.error(err);
