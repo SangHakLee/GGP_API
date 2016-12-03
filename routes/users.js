@@ -308,6 +308,9 @@ router.get('/keywords', function(req, res){
 // api/users/like/posts/
 router.post('/like/posts', function(req, res){
 	logger.info('add like posts');
+	console.log('/like/posts');
+	console.log('req.seesion : ', req.session);
+    console.log('req.body : ', req.body);
 
 	var user_id = req.session.user_id || req.body.user_id;
 	var post_id = req.body.post_id;
