@@ -9,6 +9,19 @@ var logger = require('../logger/winston');
 
 function Crawler(){}
 
+// searchKeywords.js 대체
+Crawler.prototype.findKeywords = function(sentence) {
+	return models.Keywords.findAll({
+		limit : 50,
+		order : ['updated_at', 'desc']
+	}).then(function(keywords){
+		return keywords;
+	}).catch(function(err){
+		throw err;
+	});
+};
+
+
 function getBoardNoFromUrl(url) {
   var aa = url.split(';');
   for (var i in aa) {

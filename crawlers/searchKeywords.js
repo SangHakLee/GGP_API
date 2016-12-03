@@ -1,7 +1,5 @@
 var models = require('../models');
 
-console.log('aaaaa', models)
-
 function Bot() {}
 
 Bot.prototype.findKeywords = function(sentence) {

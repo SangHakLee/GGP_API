@@ -7,7 +7,9 @@ var models = require('../models');
 var LIMIT = 10;
 router.get('/', function(req, res){
   logger.info('get all posts');
+
   console.log('req.seesion : ', req.session);
+  console.log('req.query : ', req.query);
 
   var user_id = req.session.user_id || req.query.user_id;
 
@@ -38,6 +40,9 @@ router.get('/', function(req, res){
 
 router.get('/:id', function(req, res){
   logger.info('get post by id');
+  console.log('req.seesion : ', req.session);
+  console.log('req.query : ', req.query);
+
   var user_id = req.session.user_id || req.query.user_id;
   models.Posts.find({
 	  where  : {id : req.params.id},
