@@ -384,7 +384,7 @@ function findUserId (posts, user_id){
 	return {count: count, like: like};
 }
 
-router.delete('/like/posts', function(req, res) {
+router.put('/like/posts', function(req, res) {
 	logger.info('delete like posts');
 	console.log('req.seesion : ', req.session);
     console.log('req.body : ', req.body);
@@ -446,12 +446,16 @@ router.get('/like/posts', function(req, res) {
 			{model : models.Users}
 		]
 	}).then(function(posts){
+		console.log('posts', posts);
+		for ( var i in posts ) {
+			console.log('posts', i);
+
+			// var likeInfo = findUserId(posts[i], user_id);
+			// posts[i].dataValues.like_count  = likeInfo.count;
+			// posts[i].dataValues.is_user_like = likeInfo.like;
+		}
 		// console.log('posts', posts);
-		// for ( var i in posts ) {
-		// 	var likeInfo = findUserId(posts[i], user_id);
-		// 	posts[i].dataValues.like_count  = likeInfo.count;
-		// 	posts[i].dataValues.is_user_like = likeInfo.like;
-		// }
+
       res.json(posts);
     }).catch(function(err){
       res.json(err);
