@@ -66,6 +66,7 @@ router.get('/:id', function(req, res){
 
 function findUserId (posts, user_id){
 	var UsersLikePosts = posts.get('UsersLikePosts');
+	// console.log('UsersLikePosts :', UsersLikePosts);
 
 	var count = UsersLikePosts.length;
 	var like  = false;
@@ -74,7 +75,7 @@ function findUserId (posts, user_id){
 			like = true;
 		}
 	}
-	console.log('count :', count);
+	// console.log('count :', count);
 
 	return {count: count, like: like};
 }

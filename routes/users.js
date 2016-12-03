@@ -11,6 +11,9 @@ var _ = require('underscore');
 // var cons = require('../config/constant');
 var logger = require('../logger/winston');
 
+var LIMIT = 10;
+
+
 router.post('/join', function(req, res, next) {
 	var user_id = req.body.user_id;
 	var password = req.body.password;
@@ -439,16 +442,36 @@ router.get('/like/posts', function(req, res) {
 			code  : 2
 		});
 	}
+
+	var page  = req.query.page || 1;
+    var limit = req.query.limit || LIMIT;
+    var offset = (page-1) * limit;
+
 	models.UsersLikePosts.findAll({
 		where : {'user_id' : user_id},
+		limit  : limit,
+  	  	offset : offset,
 		include  : [
-			{model : models.Posts},
+			{
+				model : models.Posts,
+				include : [{
+		  		  model: models.UsersLikePosts, // 좋아요 여부
+		  		  attributes: ['user_id', 'post_id']
+		  	  	}],
+			},
 			{model : models.Users}
-		]
+		],
+		order  : 'created_at DESC'
 	}).then(function(posts){
-		console.log('posts', posts);
+		// console.log('posts', posts);
+
 		for ( var i in posts ) {
-			console.log('posts', i);
+			// console.log('posts', posts[i].get('Post') );
+
+			var likeInfo = findUserId(posts[i].get('Post'), user_id);
+			posts[i].dataValues.like_count = likeInfo.count;
+			posts[i].dataValues.is_user_like = likeInfo.like;
+			// res.json(like);
 
 			// var likeInfo = findUserId(posts[i], user_id);
 			// posts[i].dataValues.like_count  = likeInfo.count;
