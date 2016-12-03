@@ -63,6 +63,8 @@ router.post('/join', function(req, res, next) {
 
 router.post('/login', function(req, res) {
 	logger.info('post login id/pw');
+	console.log('req.seesion : ', req.session);
+    console.log('req.body : ', req.body);
 
 	var user_id = req.body.user_id;
 	var password = req.body.password;
@@ -109,6 +111,8 @@ router.post('/login', function(req, res) {
 		if ( req.body.reg_id ) {
 			user.update({
 				reg_id : req.body.reg_id
+			}).then(function(result){
+				req.session.reg_id = req.body.reg_id;
 			}).catch(function(err){
 				logger.info('로그인 후 reg_id 등록 실패 : ' + err);
 			});
