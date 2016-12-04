@@ -62,12 +62,11 @@ db.Posts.hook('afterCreate', function(post, options){
 				]
 			}).then(function(users){
 				var reg_ids = users.filter(function(item){
-					console.log('item', item.User.get('reg_id'));
 					if ( item.User.get('reg_id') ) return true;
 					else return false;
 				}).map(function(item) {return item.User.get('reg_id'); });
 
-				gcm.sendGcm('post_title', 'post_content', reg_ids, function(result){
+				gcm.sendGcm(post_title, post_content, reg_ids, function(result){
 					console.log('result : ', result);
 				});
 			});

@@ -16,6 +16,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
+	cron_rule: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     paging: {
       type: DataTypes.STRING,
       allowNull: true

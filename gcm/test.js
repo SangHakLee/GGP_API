@@ -38,14 +38,21 @@ function Gcm() {
 }
 
 Gcm.prototype.sendGcm = function(title, msg, regIds, callback){
+
 	var message = new gcm.Message({
 		collapseKey: 'demo',
 		delayWhileIdle: true,
 		timeToLive: 3,
 		data: {
-		  title  : title,
-		  message: msg
-		}
+    		// post_id : 381,
+	      post_title: title,
+	      post_content: msg
+	    },
+	    notification: {
+	      title: title,
+	      icon: "aim_bleu",
+	      body: msg
+	    }
 	});
 	sender.send(message, regIds, 4, function (err, result) {
 	    console.log(result);
