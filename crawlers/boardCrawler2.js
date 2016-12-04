@@ -6,6 +6,7 @@ var request = require('request'),
 var models = require('../models');
 var logger = require('../logger/winston');
 
+// console.log('models : ', models);
 
 function Crawler(){}
 

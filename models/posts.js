@@ -60,6 +60,7 @@ module.exports = function(sequelize, DataTypes) {
     return Posts;
 };
 
+var models = require('../models');
 var logger = require('../logger/winston');
 var Gcm = require('../gcm/test');
 // var Bot = require('../crawlers/searchKeywords');
@@ -98,5 +99,19 @@ var send = smtpTransport.templateSender({
 // var crawler = new Crawler();
 // crawler.findKeywords('아마따 아마따')
 // .then(function(result){
-//
+// 	// console.log('result : ', result);
 // });
+
+
+// function findKeywords(sentence) {
+// 	models.Keywords.findAll({
+// 		limit : 50,
+// 		order : ['updated_at', 'desc']
+// 	}).then(function(keywords){
+// 		console.log('result : ', result);
+//
+// 	}).catch(function(err){
+// 		throw err;
+// 	});
+// }
+// findKeywords('아마따 아마따');

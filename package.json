@@ -33,6 +33,7 @@
     "sequelize": "^3.24.0",
     "serve-favicon": "~2.3.0",
     "stamplay": "^1.0.6",
+    "truncate": "^2.0.0",
     "underscore": "^1.8.3",
     "winston": "^2.2.0"
   },
