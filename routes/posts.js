@@ -8,8 +8,8 @@ var LIMIT = 10;
 router.get('/', function(req, res){
   logger.info('get all posts');
 
-  console.log('req.seesion : ', req.session);
-  console.log('req.query : ', req.query);
+  // console.log('req.seesion : ', req.session);
+  // console.log('req.query : ', req.query);
 
   var user_id = req.session.user_id || req.query.user_id;
 
