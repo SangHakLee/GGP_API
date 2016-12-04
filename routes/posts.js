@@ -19,11 +19,14 @@ router.get('/', function(req, res){
   models.Posts.findAll({
 	  limit  : limit,
 	  offset : offset,
+
+	//   attributes: ['post_title', 'id', 'post_no'],
+
 	  include : [{
 		  model: models.UsersLikePosts, // 좋아요 여부
 		  attributes: ['user_id', 'post_id']
 	  }],
-	  order  : 'post_no DESC'
+	  order : [['post_no', 'DESC']]
   })
   .then(function(posts){
 	for ( var i in posts ) {
